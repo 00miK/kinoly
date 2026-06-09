@@ -6,11 +6,18 @@
 const express = require('express');
 const router = express.Router();
 
-const authRoutes = require('./authRoutes');
+const authRoutes   = require('./authRoutes');
+const movieRoutes  = require('./movieRoutes');
+const reviewRoutes = require('./reviewRoutes');
 
 // --- Routes d'authentification ---
-// Toutes les routes de authRoutes.js seront préfixées par /api/auth
 router.use('/auth', authRoutes);
+
+// --- Routes films ---
+router.use('/movies', movieRoutes);
+
+// --- Routes critiques ---
+router.use('/reviews', reviewRoutes);
 
 // --- Route de santé ---
 // GET /api/health
