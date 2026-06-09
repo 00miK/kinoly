@@ -295,4 +295,55 @@ const deleteMovie = async (req, res) => {
   }
 };
 
-module.exports = { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie };
+// ============================================================
+// POST /api/movies/:id/poster
+// Upload de l'affiche d'un film. Accessible au propriétaire ou à un admin.
+// Multer a déjà sauvegardé le fichier sur le disque avant d'arriver ici ;
+// req.file contient les informations du fichier uploadé.
+// ============================================================
+const uploadPoster = async (req, res) => {
+  try {
+    // Si aucun fichier n'a été envoyé dans la requête
+    if (!req.file) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Aucun fichier envoyé. Utilisez le champ "poster".',
+      });
+    }
+
+    const movie = await Movie.findByPk(req.params.id);
+
+    if (!movie) {
+      return res.status(404).json({ status: 404, message: 'Film non trouvé.' });
+    }
+
+    const estProprietaire = movie.user_id === req.user.id;
+    const estAdmin = req.user.role === 'admin';
+
+    if (!estProprietaire && !estAdmin) {
+      return res.status(403).json({
+        status: 403,
+        message: 'Accès interdit. Vous n\'êtes pas le propriétaire de ce film.',
+      });
+    }
+
+    // On construit l'URL publique accessible via /uploads/nom-du-fichier
+    // req.file.filename contient le nom généré par multer (timestamp + nom original)
+    const posterUrl = `/uploads/${req.file.filename}`;
+    await movie.update({ poster_url: posterUrl });
+
+    return res.status(200).json({
+      status: 200,
+      message: 'Affiche uploadée avec succès.',
+      data: {
+        poster_url: posterUrl,
+        film: movie.title,
+      },
+    });
+  } catch (error) {
+    console.error('[uploadPoster]', error);
+    return res.status(500).json({ status: 500, message: 'Erreur interne du serveur.' });
+  }
+};
+
+module.exports = { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie, uploadPoster };

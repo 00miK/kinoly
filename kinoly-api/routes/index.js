@@ -6,9 +6,11 @@
 const express = require('express');
 const router = express.Router();
 
-const authRoutes   = require('./authRoutes');
-const movieRoutes  = require('./movieRoutes');
-const reviewRoutes = require('./reviewRoutes');
+const authRoutes    = require('./authRoutes');
+const movieRoutes   = require('./movieRoutes');
+const reviewRoutes  = require('./reviewRoutes');
+const contactRoutes = require('./contactRoutes');
+const adminRoutes   = require('./adminRoutes');
 
 // --- Routes d'authentification ---
 router.use('/auth', authRoutes);
@@ -18,6 +20,12 @@ router.use('/movies', movieRoutes);
 
 // --- Routes critiques ---
 router.use('/reviews', reviewRoutes);
+
+// --- Formulaire de contact (public) ---
+router.use('/contact', contactRoutes);
+
+// --- Routes d'administration (admin uniquement) ---
+router.use('/admin', adminRoutes);
 
 // --- Route de santé ---
 // GET /api/health

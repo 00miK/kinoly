@@ -50,6 +50,15 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // ============================================================
+// FICHIERS STATIQUES
+// Le dossier uploads/ est servi publiquement : une image uploadée
+// sera accessible via http://localhost:3001/uploads/nom-du-fichier.jpg
+// express.static() lit directement le fichier sur le disque
+// sans passer par les routes Express.
+// ============================================================
+app.use('/uploads', express.static('uploads'));
+
+// ============================================================
 // ROUTES
 // On préfixe toutes les routes avec /api pour les distinguer
 // d'éventuels fichiers statiques ou d'autres services.

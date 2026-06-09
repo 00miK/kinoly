@@ -12,10 +12,12 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
+  uploadPoster,
 } = require('../controllers/movieController');
 
-const { protect } = require('../middlewares/authMiddleware');
-const validate    = require('../middlewares/validate');
+const { protect }       = require('../middlewares/authMiddleware');
+const validate          = require('../middlewares/validate');
+const { handleUpload }  = require('../middlewares/upload');
 const {
   createMovieSchema,
   updateMovieSchema,
@@ -29,5 +31,9 @@ router.get('/:id', getMovieById);  // GET /api/movies/:id
 router.post('/',    protect, validate(createMovieSchema), createMovie);   // POST   /api/movies
 router.put('/:id',  protect, validate(updateMovieSchema), updateMovie);   // PUT    /api/movies/:id
 router.delete('/:id', protect, deleteMovie);                              // DELETE /api/movies/:id
+
+// Upload d'affiche : handleUpload('poster') gère multer + ses erreurs,
+// puis uploadPoster() met à jour poster_url en base.
+router.post('/:id/poster', protect, handleUpload('poster'), uploadPoster); // POST /api/movies/:id/poster
 
 module.exports = router;

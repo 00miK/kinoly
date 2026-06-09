@@ -1,0 +1,10 @@
+# Dépendances Node.js
+node_modules/
+
+# Variables d'environnement (contient des secrets : ne jamais versionner)
+.env
+
+# Images uploadées par les utilisateurs (fichiers binaires lourds)
+uploads/*
+# On conserve le dossier lui-même dans git grâce au .gitkeep
+!uploads/.gitkeep
