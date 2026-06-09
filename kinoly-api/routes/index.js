@@ -6,6 +6,12 @@
 const express = require('express');
 const router = express.Router();
 
+const authRoutes = require('./authRoutes');
+
+// --- Routes d'authentification ---
+// Toutes les routes de authRoutes.js seront préfixées par /api/auth
+router.use('/auth', authRoutes);
+
 // --- Route de santé ---
 // GET /api/health
 // Permet de vérifier rapidement que l'API est en ligne et répond correctement.
